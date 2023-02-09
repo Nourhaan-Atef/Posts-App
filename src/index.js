@@ -1,17 +1,39 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import IndexPostList from "./pages/indexPostList";
+import AddPostsPage from "./pages/AddPostsPage";
+import EditPage from "./pages/EditPage";
+import DetailsPage from "./pages/DetailsPage";
+import RootLayout from "./pages/RootLayout";
+import { Provider } from "react-redux";
+import store from "./store/indexStore";
+import "./index.css";
+import ErrorPage from "./pages/ErrorPage";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <RootLayout />,
+    errorElement: <ErrorPage />,
+    children: [
+      { index: true, element: <IndexPostList /> },
+      { path: "post", element: <IndexPostList /> },
+      { path: "post/add", element: <AddPostsPage /> },
+      {
+        path: "post/:id/edit",
+        element: <EditPage />,
+      },
+      {
+        path: "post/:id/details",
+        element: <DetailsPage />,
+      },
+    ],
+  },
+]);
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+  <Provider store={store}>
+    <RouterProvider router={router} />
+  </Provider>
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
